@@ -49,7 +49,7 @@ app.get('/v1/senai/locadora/filme/:id', async function (request, response) {
     //Recebe o ID do filme via parametro
     let id = request.params.id
 
-    let result = await controllerFilme.buscarFilme()
+    let result = await controllerFilme.buscarFilme(id)
 
     response.status(result.status_code)
     response.json(result)
