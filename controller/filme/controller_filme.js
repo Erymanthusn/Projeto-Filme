@@ -42,9 +42,9 @@ const inserirNovoFilme = async function(filme, contentType) {
                 customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
 
             }else{ //500
-                customMessage.DEFAULT_MESSAGE.status = customMessage.ERROR_INTERNAL_SERVER.status
-                customMessage.DEFAULT_MESSAGE.status_code = customMessage.ERROR_INTERNAL_SERVER.status_code
-                customMessage.DEFAULT_MESSAGE.message = customMessage.ERROR_INTERNAL_SERVER.message
+                customMessage.DEFAULT_MESSAGE.status = customMessage.ERROR_INTERNAL_SERVER_MODEL.status
+                customMessage.DEFAULT_MESSAGE.status_code = customMessage.ERROR_INTERNAL_SERVER_MODEL.status_code
+                customMessage.DEFAULT_MESSAGE.message = customMessage.ERROR_INTERNAL_SERVER_MODEL.message
 
             }
 
@@ -93,16 +93,73 @@ const atualizarFilme = async function() {
 
 //Função para retornar todos os filmes existentes
 const listarFilme = async function() {
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+        //Chama a função do DAO para retornar a lista de filmes do BD
+        let result = await filmeDAO.selectAllFilme()
+
+        //Validação para verificar se o DAO conseguiu processar o script no banco de dados
+        if(result){
+            //Validação para verificar se o conteúdo do Array tem dados de retorno ou se está vazio
+            if(result.length > 0){
+                customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
+                customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
+                customMessage.DEFAULT_MESSAGE.response.count = result.length
+                customMessage.DEFAULT_MESSAGE.response.filme = result
+
+                return customMessage.DEFAULT_MESSAGE
+            }else{
+                return customMessage.ERROR_NOT_FOUND //404
+            }
+
+        }else{
+            return customMessage.error.ERROR_INTERNAL_SERVER_MODEL //500(Model)
+        }
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER //500 (Controller)
+    }
 
 }
 
 
 //Função para buscar um filme pelo ID
-const buscarFilme = async function() {
+const buscarFilme = async function(id) {
 
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+        //Validação para garantir que o ID seja um número válido
+        if(id == '' || id == null || id == undefined || isNaN(Number(id))){
+            customMessage.ERROR_BAD_REQUEST.field = '[ID] INVALIDO'
+            return customMessage.ERROR_BAD_REQUEST //400
+        }else{
+            //Chama a função do DAO para pesquisar o filme pelo ID
+            let result = await filmeDAO.selectByIdFilme(id)
+            //Validação para verificar se o DAO retornou dados ou um FALSE (erro)
+            if(result){
+                //Validação para verificar se o DAO tem algum dado no Array
+                if(result.length > 0){
+                    customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
+                    customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
+                    customMessage.DEFAULT_MESSAGE.response.filme = result
+
+                    return customMessage.DEFAULT_MESSAGE//200
+                }else{
+                    return customMessage.ERROR_NOT_FOUND //404
+                }
+            }else{
+                return customMessage.ERROR_INTERNAL_SERVER_MODEL //500 (Model)
+            }
+        }
+        
+        
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER //500 (Controller)
+    }
 }
 
-
+console.log(buscarFilme)
 //Função para excluir um filme
 const excluirFilme = async function() {
 

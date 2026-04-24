@@ -14,7 +14,7 @@ const DEFAULT_MESSAGE =  {
     version: '1.0.4.26',
     status: Boolean,
     status_code: Number,
-    message: String
+    response: {}
 }
 
 //Mensagens de ERRO do projeto de filmes
@@ -32,7 +32,7 @@ const SUCCESS_CREATED_ITEM = {
 }
 
 //Mensagens de ERRO do servidor MODEL
-const ERROR_INTERNAL_SERVER = {
+const ERROR_INTERNAL_SERVER_MODEL = {
     status: 'false',
     status_code:500,
     message: 'Não foi possivel processar a requisição devido a um erro interno no servidor [MODEL].'
@@ -50,11 +50,25 @@ const ERROR_INTERNAL_SERVER_CONTROLLER = {
     message: 'Não foi possivel processar a requisição devido a um erro interno no servidor [CONTROLLER].'
 }
 
+const ERROR_NOT_FOUND = {
+    status: 'false',
+    status_code:404,
+    message: 'Não foram encontrados dados para retorno.'
+}
+
+const SUCCESS_RESPONSE = {
+    status: 'true',
+    status_code: 200,
+}
+
+
     module.exports = {
         DEFAULT_MESSAGE,
         ERROR_BAD_REQUEST,
         SUCCESS_CREATED_ITEM,
-        ERROR_INTERNAL_SERVER,
+        ERROR_INTERNAL_SERVER_MODEL,
         ERROR_CONTENT_TYPE,
-        ERROR_INTERNAL_SERVER_CONTROLLER
+        ERROR_INTERNAL_SERVER_CONTROLLER,
+        ERROR_NOT_FOUND,
+        SUCCESS_RESPONSE
     }
