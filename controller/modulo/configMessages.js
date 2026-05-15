@@ -61,6 +61,18 @@ const SUCCESS_RESPONSE = {
     status_code: 200,
 }
 
+const SUCCESS_UPDATED_ITEM = {
+    status: 'true', 
+    status_code: 200, 
+    message: 'Item atualizado com sucesso'
+}
+
+const SUCCESS_DELETED_ITEM = {
+    status: 'true',
+    status_code: 200,
+    message: 'Item excluído com sucesso.'
+}
+
 
     module.exports = {
         DEFAULT_MESSAGE,
@@ -70,5 +82,7 @@ const SUCCESS_RESPONSE = {
         ERROR_CONTENT_TYPE,
         ERROR_INTERNAL_SERVER_CONTROLLER,
         ERROR_NOT_FOUND,
-        SUCCESS_RESPONSE
+        SUCCESS_RESPONSE,
+        SUCCESS_UPDATED_ITEM,
+        SUCCESS_DELETED_ITEM
     }

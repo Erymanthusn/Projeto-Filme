@@ -1,0 +1,731 @@
+openapi: 3.0.3
+info:
+  title: Projeto Controle de Filmes - Kaique Carvalho Costa
+  description: |- 
+   API destinada a controle de filmes para o projeto "Bem Legal" do Senai
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: Kaique.carvalho.costa8@email.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://
+paths:
+  /v1/senai/locadora/filme:
+    post:
+      tags:
+        - Filme
+      summary: Adiciona um novo Filme
+      description: Adiciona um novo Filme
+      requestBody:
+        description: JSON contendo os dados do novo Filme a ser inserido no sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Filme'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+    get:
+      tags:
+        - Filme
+      summary: Listar todos os Filmes
+      description: Listagem de todos os Filmes registrados no sistema
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Filme'          
+           
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+  /v1/senai/locadora/filme/{id}:
+    get:
+      tags:
+        - Filme
+      summary: Busca um Filme pelo ID
+      description: Retorna um filme pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para realizar a busca do Filme
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Filme'          
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+    put:
+      tags:
+        - Filme
+      summary: Atualiza um Filme existente pelo ID
+      description: Buscar e atualizar um filme pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para realizar o Update do Filme
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Dados para atualizar um filme
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/filme'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+       
+    delete:
+      tags:
+        - Filme
+      summary: Deletar Filme existente
+      description: Excluir um filme
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+  
+  /v1/senai/locadora/genero:
+    post:
+      tags:
+        - Gênero
+      summary: Adiciona um novo Gênero
+      description: Adiciona um novo Gênero
+      requestBody:
+        description: JSON contendo os dados do novo Gênero a ser inserido no sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Gênero'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+    get:
+      tags:
+        - Gênero
+      summary: Listar todos os Gênero
+      description: Listagem de todos os Gênero registrados no sistema
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gênero'          
+           
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+  /v1/senai/locadora/genero/{id}:
+    get:
+      tags:
+        - Gênero
+      summary: Busca um Gênero pelo ID
+      description: Retorna um Gênero pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para realizar a busca do Gênero
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gênero'          
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+    put:
+      tags:
+        - Gênero
+      summary: Atualiza um Gênero existente pelo ID
+      description: Buscar e atualizar um Gênero pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para realizar o Update do Gênero
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Dados para atualizar um Gênero
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Gênero'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+       
+    delete:
+      tags:
+        - Gênero
+      summary: Deletar um Gênero existente
+      description: Excluir um Gênero
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+
+  /v1/senai/locadora/nacionalidade:
+    post:
+      tags:
+        - Nacionalidade
+      summary: Adiciona uma nova Nacionalidade
+      description: Adiciona uma nova Nacionalidade ao Banco
+      requestBody:
+        description: JSON contendo os dados da nova Nacionalidade a ser inserido no sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Nacionalidade'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+    get:
+      tags:
+        - Nacionalidade
+      summary: Listar todas as Nacionalidades
+      description: Listagem de todas as Nacionalidades registrados no sistema
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Nacionalidade'          
+           
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+  /v1/senai/locadora/nacionalidade/{id}:
+    get:
+      tags:
+        - Nacionalidade
+      summary: Busca uma Nacionalidade pelo ID
+      description: Retorna uma Nacionalidade pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para realizar a busca da Nacionalidade
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Nacionalidade'          
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+    put:
+      tags:
+        - Nacionalidade
+      summary: Atualiza uma Nacionalidade existente pelo ID
+      description: Buscar e atualizar uma Nacionalidade pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para realizar o Update da Nacionalidade
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Dados para atualizar uma Nacionalidade
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Nacionalidade'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+       
+    delete:
+      tags:
+        - Nacionalidade
+      summary: Deletar uma Nacionalidade existente
+      description: Excluir uma Nacionalidade
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+
+  /v1/senai/locadora/classificacao:
+    post:
+      tags:
+        - Classificação
+      summary: Adiciona uma nova Classificação
+      description: Adiciona uma nova Classificação ao Banco
+      requestBody:
+        description: JSON contendo os dados da nova Classificação a ser inserido no sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Classificação'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+    get:
+      tags:
+        - Nacionalidade
+      summary: Listar todas as Classificações
+      description: Listagem de todas as Classificações registrados no sistema
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Classificação'          
+           
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+  /v1/senai/locadora/classificacao/{id}:
+    get:
+      tags:
+        - Classificação
+      summary: Busca uma Classificação pelo ID
+      description: Retorna uma Classificação pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para realizar a busca da Classificação
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classificação'          
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+    put:
+      tags:
+        - Classificação
+      summary: Atualiza uma Classificação existente pelo ID
+      description: Buscar e atualizar uma Classificação pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para realizar o Update da Classificação
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Dados para atualizar uma Classificação
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Classificação'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+       
+    delete:
+      tags:
+        - Classificação
+      summary: Deletar uma Classificação existente
+      description: Excluir uma Classificação
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+  
+  /v1/senai/locadora/sexo:
+    post:
+      tags:
+        - Sexo
+      summary: Adiciona um novo Sexo
+      description: Adiciona um novo Sexo ao Banco
+      requestBody:
+        description: JSON contendo os dados do novo Sexo a ser inserido no sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sexo'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+    get:
+      tags:
+        - Sexo
+      summary: Listar todas os Sexos
+      description: Listagem de todas os Sexos registrados no sistema
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sexo'          
+           
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+  /v1/senai/locadora/sexo/{id}:
+    get:
+      tags:
+        - Sexo
+      summary: Busca um Sexo pelo ID
+      description: Retorna um Sexo pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para realizar a busca do Sexo
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sexo'          
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+    put:
+      tags:
+        - Sexo
+      summary: Atualiza um Sexo existente pelo ID
+      description: Buscar e atualizar um Sexo pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID para realizar o Update do Sexo
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Dados para atualizar um Sexo
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sexo'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+       
+    delete:
+      tags:
+        - Sexo
+      summary: Deletar um Sexo existente
+      description: Excluir um Sexo
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Path not found
+        '415':
+          description: Invalid Content-Type
+        '500':
+          description: Error Internal Server (Controller/Model)
+components:
+  schemas:
+    Filme:
+      required:
+        - nome
+        - sinopse
+        - data_lancamento
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        sinopse:
+          type: string
+        data_lancamento:
+          type: string
+        duracao:
+          type: string
+        capa:
+          type: string
+        valor:
+          type: string
+        avaliacao:
+          type: string
+    Gênero:
+      required:
+        - nome
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string   
+    Nacionalidade:
+      required:
+        - pais
+      type: object
+      properties:
+        id:
+          type: integer
+        pais:
+          type: string
+    Classificação:
+      required:
+        - descricao
+      type: object
+      properties:
+        id:
+          type: integer
+        descricao:
+          type: string
+    Sexo:
+      required:
+        - sigla
+      type: object
+      properties:
+        id:
+          type: integer
+        sigla:
+          type: string
+  requestBodies:
+    Aluno:
+      description: Objeto que deve ser enviado no Body das requisicoes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Filme'
+    
