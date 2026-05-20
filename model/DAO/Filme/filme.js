@@ -31,7 +31,9 @@ const insertFilme = async function (filme) {
             data_lancamento,
             duracao,
             valor,
-            avaliacao
+            avaliacao,
+            id_classificacao,
+            id_genero
         ) values (
             '${filme.nome}',
             '${filme.sinopse}',
@@ -39,7 +41,9 @@ const insertFilme = async function (filme) {
             '${filme.data_lancamento}',
             '${filme.duracao}',
             '${filme.valor}',
-            if('${filme.avaliacao}' = '', null, '${filme.avaliacao}')
+            if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
+            '${filme.id_classificacao}',
+            '${filme.id_genero}'
         );`
 
         //Encaminha para o banco de dados o scriptSQL
@@ -56,6 +60,7 @@ const insertFilme = async function (filme) {
         }
 
     } catch (error) {
+        console.log(error)
         return false
 
     }
@@ -67,13 +72,15 @@ const insertFilme = async function (filme) {
 const updateFilme = async function (filme) {
     try {
         let sql = `update tbl_filme set
-                        nome            = '${filme.nome}',
-                        sinopse         = '${filme.sinopse}',
-                        capa            = '${filme.capa}',
-                        data_lancamento = '${filme.data_lancamento}',
-                        duracao         = '${filme.duracao}',
-                        valor           = '${filme.valor}',
-                        avaliacao       = if('${filme.avaliacao}' = '', null, '${filme.avaliacao}')
+                        nome                = '${filme.nome}',
+                        sinopse             = '${filme.sinopse}',
+                        capa                = '${filme.capa}',
+                        data_lancamento     = '${filme.data_lancamento}',
+                        duracao             = '${filme.duracao}',
+                        valor               = '${filme.valor}',
+                        avaliacao           = if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
+                        id_classificacao    = '${filme.id_classificacao}',
+                        id_genero           = '${filme.id_genero}'
                     where id            = ${filme.id};`
 
 let result = await knexConection.raw(sql)
