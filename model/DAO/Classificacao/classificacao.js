@@ -120,12 +120,14 @@ const deleteClassificacao = async function (id) {
 
         let result = await knexConection.raw(sql)
 
-        if (result) {
-            return true
+        if (Array.isArray(result)) {
+            return result[0]
+
         } else {
             return false
         }
     } catch (error) {
+        console.log(error)
         return false
     }
     

@@ -32,8 +32,7 @@ const insertFilme = async function (filme) {
             duracao,
             valor,
             avaliacao,
-            id_classificacao,
-            id_genero
+            id_classificacao
         ) values (
             '${filme.nome}',
             '${filme.sinopse}',
@@ -42,8 +41,7 @@ const insertFilme = async function (filme) {
             '${filme.duracao}',
             '${filme.valor}',
             if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
-            '${filme.id_classificacao}',
-            '${filme.id_genero}'
+            '${filme.id_classificacao}'
         );`
 
         //Encaminha para o banco de dados o scriptSQL
@@ -79,8 +77,7 @@ const updateFilme = async function (filme) {
                         duracao             = '${filme.duracao}',
                         valor               = '${filme.valor}',
                         avaliacao           = if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
-                        id_classificacao    = '${filme.id_classificacao}',
-                        id_genero           = '${filme.id_genero}'
+                        id_classificacao    = '${filme.id_classificacao}'
                     where id            = ${filme.id};`
 
 let result = await knexConection.raw(sql)

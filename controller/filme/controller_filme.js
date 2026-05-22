@@ -2,7 +2,7 @@ const configMessages = require('../modulo/configMessages.js')
 
 const filmeDAO = require('../../model/DAO/Filme/filme.js')
 const controllerClassificacao = require('../classificacao/controller_classificacao.js')
-const controllerGenero = require('../genero/controller_genero.js')
+const controllerFilmeGenero = require('./controller_filme_genero.js')
 
 const inserirNovoFilme = async function (filme, contentType) {
 
@@ -21,6 +21,22 @@ const inserirNovoFilme = async function (filme, contentType) {
 
                 if (result) {
                     filme.id = result
+
+                    //Manipulação de dados para inserir os Generos relacionados ao filme
+
+                    //Percorre o array d egeneros que chegara na
+                    // requisição pelo objeto Filme
+                    for(itemFilme of filme_genero){
+                    let filmeGenero = {
+                                    "id_filme":     filme.id,
+                                    "id_genero":    itemFilme.id
+                    }
+
+                    let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
+                    console.log(resultFilmeGenero)
+
+                }
+
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
                     customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
@@ -36,6 +52,7 @@ const inserirNovoFilme = async function (filme, contentType) {
             }
         
     } catch (error) {
+        console.log(error)
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
@@ -51,13 +68,11 @@ const listarFilme = async function () {
 
                 for (filme of result){
                     let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
-                    let resultGenero = await controllerGenero.buscarGenero(filme.id_genero)
 
                     if(resultClassificacao.status & resultGenero.status){
                         filme.classificacao = resultClassificacao.response.classificacao
-                        filme.genero = resultGenero.response.genero
                         delete filme.id_classificacao
-                        delete filme.id_genero
+
                     }
                 }
 
@@ -77,6 +92,7 @@ const listarFilme = async function () {
         }
 
     } catch (error) {
+        console.log(error)
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
@@ -124,6 +140,7 @@ const buscarFilme = async function (id) {
         }
 
     } catch (error) {
+        console.log(error)
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 
@@ -149,6 +166,7 @@ const excluirFilme = async function (id) {
         }
 
     } catch (error) {
+        console.log(error)
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
@@ -220,13 +238,11 @@ const validarDados = async function (filme) {
          return customMessage.ERROR_BAD_REQUEST 
     } else if (filme.avaliacao == undefined || isNaN(filme.avaliacao) || filme.avaliacao.length > 3) {
         customMessage.ERROR_BAD_REQUEST.field = '[AVALIAÇÃO] INVÁLIDO' 
+        console.log(error)
         return customMessage.ERROR_BAD_REQUEST 
     } else if(filme.id_classificacao == undefined || filme.id_classificacao == null ||filme.id_classificacao <=0 ){
-        customMessage.ERROR_BAD_REQUEST.field = '[AVALIAÇÃO] INVÁLIDO'
-        return customMessage.ERROR_BAD_REQUEST
-        
-    } else if(filme.id_genero == undefined || filme.id_genero == null || filme.id_genero <=0){
-        customMessage.ERROR_BAD_REQUEST.field = '[AVALIAÇÃO] INVÁLIDO'
+        customMessage.ERROR_BAD_REQUEST.field = '[CLASSIFICAÇÃO] INVÁLIDO'
+        console.log(error)
         return customMessage.ERROR_BAD_REQUEST
         
     } else { 
@@ -244,7 +260,6 @@ const tratarDados = async function (filme) {
     filme.valor = String(filme.valor).replaceAll("'", "")
     filme.avaliacao = String(filme.avaliacao).replaceAll("'", "")
     filme.id_classificacao = String(filme.id_classificacao).replaceAll("'", "")
-    filme.id_genero = String(filme.id_genero).replaceAll("'", "")
 
 
     return filme
