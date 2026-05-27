@@ -26,14 +26,17 @@ const inserirNovoFilme = async function (filme, contentType) {
 
                     //Percorre o array d egeneros que chegara na
                     // requisição pelo objeto Filme
-                    for(itemFilme of filme_genero){
+                    for(itemGenero of filme.genero){
                     let filmeGenero = {
                                     "id_filme":     filme.id,
-                                    "id_genero":    itemFilme.id
+                                    "id_genero":    itemGenero.id
                     }
 
                     let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
-                    console.log(resultFilmeGenero)
+                    
+                    if (!resultFilmeGenero.status){
+                        return customMessage.SUCCESS_CREATED_ITEM_WARNING //201 Com alerta de cadastro
+                    }
 
                 }
 
@@ -68,12 +71,31 @@ const listarFilme = async function () {
 
                 for (filme of result){
                     let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
+                    
 
-                    if(resultClassificacao.status & resultGenero.status){
+                    if(resultClassificacao.status){
                         filme.classificacao = resultClassificacao.response.classificacao
                         delete filme.id_classificacao
 
                     }
+                    //Manipulação de dados para retornar os Generos relacionados aos filmes
+                    let resultGeneros = await controllerFilmeGenero.buscarGenerosByIDFilme(filme.id)
+
+                    if (
+                        resultGeneros &&
+                        resultGeneros.status &&
+                        resultGeneros.response &&
+                        resultGeneros.response.filmeGenero
+                    ) {
+                    
+                        filme.genero = resultGeneros.response.filmeGenero
+                    
+                    } else {
+                    
+                        filme.genero = []
+                    
+                    }
+
                 }
 
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
@@ -122,6 +144,23 @@ const buscarFilme = async function (id) {
                             filme.classificacao = resultClassificacao.response.classificacao
                             delete filme.id_classificacao
                         }
+                                //Manipulação de dados para retornar os Generos relacionados aos filmes
+                            let resultGeneros = await controllerFilmeGenero.buscarGenerosByIDFilme(filme.id)
+
+                            if (
+                                resultGeneros &&
+                                resultGeneros.status &&
+                                resultGeneros.response &&
+                                resultGeneros.response.filmeGenero
+                            ) {
+                            
+                                filme.genero = resultGeneros.response.filmeGenero
+                            
+                            } else {
+                            
+                                filme.genero = []
+                            
+                            }
                     }
                     
                     customMessage.DEFAULT_MESSAGE.status = configMessages.SUCCESS_RESPONSE.status
@@ -190,6 +229,26 @@ const atualizarFilme = async function (filme, id, contentType) {
                     let result = await filmeDAO.updateFilme(await tratarDados(filme))
 
                     if (result) {
+
+                        //Exluir as relações entre o Filme e os Generos (tabela de relação)
+                        let resultDeleteGeneros = await controllerFilmeGenero.excluirGenerosByIDFilme(filme.id)
+
+                        if(resultDeleteGeneros.status){
+                            for(itemGenero of filme.genero){
+                                let filmeGenero = {
+                                                "id_filme":     filme.id,
+                                                "id_genero":    itemGenero.id
+                                }
+            
+                                let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
+                                
+                                if (!resultFilmeGenero.status){
+                                    return customMessage.SUCCESS_CREATED_ITEM_WARNING //201 Com alerta de cadastro
+                                }
+            
+                            }
+                        }
+
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
@@ -224,7 +283,7 @@ const validarDados = async function (filme) {
     } else if (filme.sinopse == '' || filme.sinopse == null || filme.sinopse == undefined) {
          customMessage.ERROR_BAD_REQUEST.field = '[SINOPSE] INVÁLIDO'
           return customMessage.ERROR_BAD_REQUEST 
-    } else if (filme.capa == '' || filme.capa == null || filme.capa == undefined || filme.capa > 255) {
+    } else if (filme.capa == '' || filme.capa == null || filme.capa == undefined || filme.capa.length > 255) {
          customMessage.ERROR_BAD_REQUEST.field = '[CAPA] INVÁLIDO'
           return customMessage.ERROR_BAD_REQUEST 
     } else if (filme.data_lancamento == '' || filme.data_lancamento == null || filme.data_lancamento == undefined || filme.data_lancamento.length != 10) {

@@ -37,6 +37,32 @@ const inserirNovoFilmeGenero = async function (filmeGenero) {
     }
 }
 
+const excluirGenerosByIDFilme = async function (idFilme) {
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+       
+        let resultBuscarFilmeGenero = await buscarFilmeGenero(idFilme)
+
+        if (resultBuscarFilmeGenero.status) {
+            let result = await filmeGeneroDAO.deleteGenerosByIDFilme(idFilme)
+
+            if (result) {
+                return customMessage.SUCCESS_DELETED_ITEM
+
+            } else {
+                return customMessage.ERROR_INTERNAL_SERVER_MODEL
+            }
+        } else {
+            return resultBuscarFilmeGenero
+        }
+
+    } catch (error) {
+        console.log(error)
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
+}
+
 const listarFilmeGenero = async function () {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
@@ -180,14 +206,14 @@ const buscarGenerosByIDFilme = async function (idFilme) {
 
     try {
         
-        if (String(idFilme).replaceAll(' ', '') == '' || idFilme ==null || idFilme == undefined || isNaN(id) || idFilme <= 0) {
+        if (String(idFilme).replaceAll(' ', '') == '' || idFilme ==null || idFilme == undefined || isNaN(idFilme) || idFilme <= 0) {
 
             customMessage.ERROR_BAD_REQUEST.field = '[ID] INVALIDO'
             return customMessage.ERROR_BAD_REQUEST
 
         } else {
             
-            let result = await filmeGeneroDAO.selectGenerosByIDFilme(id)
+            let result = await filmeGeneroDAO.selectGenerosByIDFilme(idFilme)
 
             if (result) {
                 if (result.length > 0) {
@@ -220,14 +246,14 @@ const buscarFilmesByIDGenero = async function (idGenero) {
 
     try {
         
-        if (String(idGenero).replaceAll(' ', '') == '' || idGenero ==null || idGenero == undefined || isNaN(id) || idGenero <= 0) {
+        if (String(idGenero).replaceAll(' ', '') == '' || idGenero ==null || idGenero == undefined || isNaN(idGenero) || idGenero <= 0) {
 
             customMessage.ERROR_BAD_REQUEST.field = '[ID] INVALIDO'
             return customMessage.ERROR_BAD_REQUEST
 
         } else {
             
-            let result = await filmeGeneroDAO.selectFilmesByIDGenero(id)
+            let result = await filmeGeneroDAO.selectFilmesByIDGenero(idGenero)
 
             if (result) {
                 if (result.length > 0) {
@@ -277,5 +303,6 @@ module.exports = {
     excluirFilmeGenero,
     atualizarFilmeGenero,
     buscarGenerosByIDFilme,
-    buscarFilmesByIDGenero
+    buscarFilmesByIDGenero,
+    excluirGenerosByIDFilme
 }

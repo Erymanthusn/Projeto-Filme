@@ -73,6 +73,12 @@ const SUCCESS_DELETED_ITEM = {
     message: 'Item excluído com sucesso.'
 }
 
+const SUCCESS_CREATED_ITEM_WARNING = {
+    status: 'true',
+    status_code: 200,
+    message: "Item inserido com sucesso, porém alguns dados tiveram problemas no cadastri. [DADOS DE RELACIONAMENTO]"
+}
+
 
     module.exports = {
         DEFAULT_MESSAGE,
