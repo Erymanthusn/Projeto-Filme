@@ -23,9 +23,17 @@ const insertAtor = async function (ator) {
     try {
 
         let sql = `insert into tbl_ator(
-            sigla
+            nome,
+            data_nascimento,
+            foto,
+            biografia,
+            id_sexo
         ) values (
-            '${ator.sigla}'
+            '${ator.nome}',
+            '${ator.data_nascimento}',
+            '${ator.foto}',
+            '${ator.biografia}',
+            '${ator.id_sexo}'
         );`
     
 
@@ -43,6 +51,7 @@ const insertAtor = async function (ator) {
         }
 
     } catch (error) {
+        console.log(error)
         return false
 
     }
@@ -53,7 +62,11 @@ const updateAtor = async function (ator) {
     
     try {
         let sql = `update tbl_ator set
-            sigla = '${ator.sigla}'
+            nome              = '${ator.nome}',
+            data_nascimento   = '${ator.data_nascimento}',
+            foto              = '${ator.foto}',
+            biografia         = '${ator.biografia}',
+            id_sexo           = '${ator.id_sexo}'
             where id = ${ator.id};`
 
     let result = await knexConection.raw(sql)
@@ -65,6 +78,7 @@ const updateAtor = async function (ator) {
 
 
     } catch (error) {
+        console.log(error)
         return false
     }
 }
@@ -104,7 +118,7 @@ const selectByIdAtor = async function (id) {
         }
 
     } catch (error) {
-
+        console.log(error)
         return false
 
     }
@@ -124,6 +138,7 @@ const deleteAtor = async function (id) {
             return false
         }
     } catch (error) {
+        console.log(error)
         return false
     }
     

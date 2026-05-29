@@ -191,17 +191,34 @@ const validarDados = async function (ator) {
 
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
-    if (ator.sigla == '' || ator.sigla == null || ator.sigla == undefined || ator.sigla.length > 100) {
+    if (ator.nome == '' || ator.nome == null || ator.nome == undefined || ator.nome.length > 100) {
         customMessage.ERROR_BAD_REQUEST.field = '[NOME] INVÁLIDO'
         return customMessage.ERROR_BAD_REQUEST
-    } else {
+    }  if (ator.data_nascimento == '' || ator.data_nascimento == null || ator.data_nascimento == undefined || ator.data_nascimento.length < 0) {
+        customMessage.ERROR_BAD_REQUEST.field = '[DATA_NASCIMENTO] INVÁLIDA'
+        return customMessage.ERROR_BAD_REQUEST
+    }  if (ator.foto == '' || ator.foto == null || ator.foto == undefined || ator.foto.length > 400) {
+        customMessage.ERROR_BAD_REQUEST.field = '[FOTO] INVÁLIDA'
+        return customMessage.ERROR_BAD_REQUEST
+    }  if (ator.biografia == '' || ator.biografia == null || ator.biografia == undefined || ator.biografia.length < 0) {
+        customMessage.ERROR_BAD_REQUEST.field = '[BIOGRAFIA] INVÁLIDA'
+        return customMessage.ERROR_BAD_REQUEST
+    }  if (ator.id_sexo == '' || ator.id_sexo == null || ator.id_sexo == undefined || ator.id_sexo.length < 0) {
+        customMessage.ERROR_BAD_REQUEST.field = '[NOME] INVÁLIDO'
+        return customMessage.ERROR_BAD_REQUEST
+    }else {
         return false
     }
 }
 
 const tratarDados = async function (ator) {
 
-    ator.sigla = ator.sigla.replaceAll("'", "")
+    ator.nome = String(ator.nome).replaceAll("'", "")
+    ator.data_nascimento = String(ator.data_nascimento).replaceAll("'", "")
+    ator.duracao = String(ator.foto).replaceAll("'", "")
+    ator.biografia = String(ator.biografia).replaceAll("'", "")
+    ator.id_sexo = String(ator.id_sexo).replaceAll("'", "")
+
 
     return ator
 }

@@ -26,6 +26,7 @@ const controllerGenero = require('./controller/genero/controller_genero.js')
 const controllerNacionalidade = require('./controller/nacionalidade/controller_nacionalidade.js')
 const controllerClassificacao = require('./controller/classificacao/controller_classificacao.js')
 const controllerSexo = require('./controller/sexo/controller_sexo.js')
+const controllerAtor = require('./controller/ator/controller_ator.js')
 
 app.post('/v1/senai/locadora/filme', bodyParserJSON, async function (request, response) {
 
@@ -329,6 +330,64 @@ app.get('/v1/senai/locadora/classificacao/:id', async function (request, respons
     response.json(result)
 })
 
+
+//ENDPOINTS de Ator:
+
+app.post('/v1/senai/locadora/ator', bodyParserJSON, async function (request, response) {
+    let dados = request.body
+
+    let contentType = request.headers['content-type']
+
+    let result = await controllerAtor.inserirNovoAtor(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/ator', bodyParserJSON, async function (request, response) {
+
+    let result = await controllerAtor.listarAtor()
+
+    response.status(result.status_code)
+    response.json(result)
+    
+})
+
+app.delete('/v1/senai/locadora/ator/:id', async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerAtor.excluirAtor(id)
+
+    response.status(result.status_code)
+    response.json(result)
+
+})
+
+app.put('/v1/senai/locadora/ator/:id',bodyParserJSON, async function(request, response){
+    
+    let contentType = request.headers['content-type']
+
+    let id = request.params.id
+
+    let dados = request.body
+
+    let result = await controllerAtor.atualizarAtor(dados, id, contentType)
+
+
+    response.status(result.status_code)
+    response.json(result)
+
+})
+
+app.get('/v1/senai/locadora/ator/:id', async function (request, response) {
+
+    let id = request.params.id
+
+    let result = await controllerAtor.buscarAtor(id)
+
+    response.status(result.status_code)
+    response.json(result)
+})
 
 app.listen(8080, function () {
 
